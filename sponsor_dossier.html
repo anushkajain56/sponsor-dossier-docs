@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sponsor Dossier Agent — Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy:#1B2A4A;
+    --navy-deep:#131E38;
+    --blue:#2E5E8C;
+    --blue-light:#5B8DBD;
+    --amber:#F0A500;
+    --grey:#4A4A4A;
+    --grey-light:#8792A2;
+    --bg:#F7F9FC;
+    --card:#FFFFFF;
+    --border:#E3E8F0;
+    --code-bg:#101B33;
+    --green:#1A6B3C;
+    --green-bg:#EAF6EE;
+    --red:#C0392B;
+    --red-bg:#FBEAE8;
+    --blue-bg:#EBF3FB;
+    --sidebar-w:280px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--grey);
+    background:var(--bg);
+    line-height:1.6;
+  }
+  a{color:var(--blue);text-decoration:none;}
+  a:hover{text-decoration:underline;}
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    position:fixed;top:0;left:0;right:0;height:60px;
+    background:var(--navy);
+    display:flex;align-items:center;
+    padding:0 24px;
+    z-index:100;
+    box-shadow:0 1px 0 rgba(255,255,255,.08);
+  }
+  .topbar .mark{
+    width:30px;height:30px;border-radius:7px;
+    background:linear-gradient(135deg,var(--blue-light),var(--amber));
+    display:flex;align-items:center;justify-content:center;
+    font-weight:800;color:var(--navy-deep);font-size:14px;
+    margin-right:12px;flex-shrink:0;
+  }
+  .topbar .title{color:#fff;font-weight:700;font-size:15px;letter-spacing:.2px;}
+  .topbar .sub{color:#93A3BE;font-size:12.5px;margin-left:10px;padding-left:10px;border-left:1px solid #34446B;}
+  .topbar .spacer{flex:1;}
+  .topbar .menu-btn{
+    display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px 8px;
+  }
+  .topbar .ghlink{
+    color:#D7E0EE;font-size:13px;border:1px solid #34446B;padding:6px 12px;border-radius:6px;
+  }
+  .topbar .ghlink:hover{background:#233257;text-decoration:none;}
+
+  /* ---------- Layout ---------- */
+  .shell{display:flex;padding-top:60px;min-height:100vh;}
+  nav.sidebar{
+    width:var(--sidebar-w);flex-shrink:0;
+    position:fixed;top:60px;bottom:0;left:0;
+    overflow-y:auto;
+    background:#FCFDFE;
+    border-right:1px solid var(--border);
+    padding:22px 0 60px;
+  }
+  nav.sidebar .group-label{
+    font-size:11px;font-weight:700;letter-spacing:.08em;color:var(--grey-light);
+    text-transform:uppercase;padding:14px 24px 8px;
+  }
+  nav.sidebar a{
+    display:block;padding:7px 24px;font-size:13.5px;color:#3C4658;
+    border-left:2.5px solid transparent;
+  }
+  nav.sidebar a:hover{background:#F0F3F9;text-decoration:none;color:var(--navy);}
+  nav.sidebar a.active{
+    border-left-color:var(--amber);
+    background:#EEF2F9;color:var(--navy);font-weight:600;
+  }
+  main{
+    margin-left:var(--sidebar-w);
+    max-width:840px;
+    padding:44px 56px 120px;
+    width:100%;
+  }
+
+  /* ---------- Typography ---------- */
+  .eyebrow{
+    color:var(--amber);font-weight:700;font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;
+  }
+  h1.page-title{
+    font-size:34px;font-weight:800;color:var(--navy);margin:8px 0 6px;letter-spacing:-.01em;
+  }
+  .lede{color:var(--grey-light);font-size:15.5px;margin-bottom:34px;}
+  section{margin-bottom:56px;scroll-margin-top:80px;}
+  section h2{
+    font-size:22px;font-weight:700;color:var(--navy);
+    margin:0 0 4px;
+    display:flex;align-items:center;gap:10px;
+  }
+  section h2 .num{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:7px;background:var(--navy);color:#fff;
+    font-size:13px;font-weight:700;flex-shrink:0;
+  }
+  section > .divider{height:1px;background:var(--border);margin:14px 0 22px;}
+  h3{font-size:16px;font-weight:700;color:var(--navy);margin:26px 0 8px;}
+  p{margin:0 0 14px;font-size:14.5px;color:#4A5468;}
+  ul.clean{margin:0 0 14px;padding-left:20px;}
+  ul.clean li{margin-bottom:8px;font-size:14.5px;color:#4A5468;}
+  ul.clean li b{color:var(--navy);}
+  code.inline{
+    background:#EEF1F6;color:#B3410F;padding:1px 6px;border-radius:4px;
+    font-family:'JetBrains Mono',monospace;font-size:12.5px;
+  }
+
+  /* ---------- Callouts ---------- */
+  .callout{
+    border-radius:10px;padding:16px 20px;margin:18px 0;border:1px solid;
+  }
+  .callout.blue{background:var(--blue-bg);border-color:#C9DEF1;}
+  .callout.green{background:var(--green-bg);border-color:#BFE3CB;}
+  .callout .callout-title{font-weight:700;font-size:13.5px;margin-bottom:8px;}
+  .callout.blue .callout-title{color:var(--blue);}
+  .callout.green .callout-title{color:var(--green);}
+  .callout ol,.callout ul{margin:0;padding-left:18px;}
+  .callout li{font-size:13.5px;margin-bottom:5px;color:#3E4A5F;}
+
+  /* ---------- Tables ---------- */
+  .tablewrap{overflow-x:auto;margin:16px 0 22px;border:1px solid var(--border);border-radius:10px;}
+  table{border-collapse:collapse;width:100%;font-size:13px;}
+  thead th{
+    background:var(--navy);color:#fff;text-align:left;
+    padding:10px 14px;font-weight:600;font-size:12.5px;
+  }
+  tbody td{padding:10px 14px;border-top:1px solid var(--border);vertical-align:top;color:#4A5468;}
+  tbody tr:nth-child(even){background:#FAFBFD;}
+  tbody td:first-child{font-weight:600;color:var(--navy);white-space:nowrap;}
+
+  /* ---------- Pill grid (stack summary) ---------- */
+  .stackgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:22px 0 8px;}
+  .stackcell{background:var(--navy);padding:14px 10px;text-align:center;}
+  .stackcell .k{color:#9FB3D1;font-size:10.5px;text-transform:uppercase;letter-spacing:.06em;font-weight:700;}
+  .stackcell .v{color:#fff;font-size:13px;font-weight:600;margin-top:4px;}
+  @media (max-width:640px){.stackgrid{grid-template-columns:repeat(2,1fr);}}
+
+  /* ---------- Badges ---------- */
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:2px 9px;border-radius:99px;}
+  .badge.green{background:var(--green-bg);color:var(--green);}
+  .badge.amber{background:#FDF1D8;color:#8A5A00;}
+  .badge.grey{background:#EEF0F4;color:#6B7484;}
+
+  footer.docfooter{
+    margin-left:var(--sidebar-w);padding:28px 56px 60px;color:var(--grey-light);font-size:12.5px;border-top:1px solid var(--border);
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width:900px){
+    nav.sidebar{transform:translateX(-100%);transition:transform .2s ease;z-index:90;background:#fff;width:78vw;max-width:320px;box-shadow:2px 0 18px rgba(0,0,0,.15);}
+    nav.sidebar.open{transform:translateX(0);}
+    main{margin-left:0;padding:32px 22px 100px;}
+    footer.docfooter{margin-left:0;padding:24px 22px 60px;}
+    .topbar .menu-btn{display:block;}
+    .topbar .sub{display:none;}
+    .stackgrid{grid-template-columns:repeat(2,1fr);}
+    .overlay{position:fixed;inset:0;background:rgba(10,15,30,.4);z-index:80;opacity:0;pointer-events:none;transition:opacity .2s;}
+    .overlay.show{opacity:1;pointer-events:auto;}
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">☰</button>
+  <div class="mark">SD</div>
+  <div class="title">Sponsor Dossier Agent</div>
+  <div class="sub">Technical Documentation</div>
+  <div class="spacer"></div>
+  <a class="ghlink" href="#" id="repoLink">View on GitHub ↗</a>
+</div>
+
+<div class="overlay" id="overlay"></div>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar">
+    <div class="group-label">Getting Started</div>
+    <a href="#overview" class="navlink">1. System Overview</a>
+    <a href="#stack" class="navlink">2. Technology Stack</a>
+
+    <div class="group-label">Core Engine</div>
+    <a href="#pipeline" class="navlink">3. Agent Pipeline</a>
+    <a href="#contacts" class="navlink">4. Contact Discovery &amp; Accuracy</a>
+    <a href="#scoring" class="navlink">5. Lead Scoring Model</a>
+
+    <div class="group-label">Product</div>
+    <a href="#ui" class="navlink">6. Dashboard &amp; Pages</a>
+    <a href="#exports" class="navlink">7. Excel &amp; PDF Exports</a>
+
+    <div class="group-label">Reference</div>
+    <a href="#issues" class="navlink">8. Known Issues</a>
+    <a href="#roadmap" class="navlink">9. Roadmap</a>
+  </nav>
+
+  <main>
+    <div class="eyebrow">NorthStar AI Labs</div>
+    <h1 class="page-title">Sponsor Dossier Agent</h1>
+    <p class="lede">Complete technical documentation for the automated sponsor research, contact discovery, and outreach management system.</p>
+
+    <div class="stackgrid">
+      <div class="stackcell"><div class="k">LLM Brain</div><div class="v">GPT-4o-mini</div></div>
+      <div class="stackcell"><div class="k">Search</div><div class="v">SerpAPI + Brave</div></div>
+      <div class="stackcell"><div class="k">Scoring</div><div class="v">Rule-based</div></div>
+      <div class="stackcell"><div class="k">Output</div><div class="v">Excel · PDF · Web App</div></div>
+    </div>
+
+    <section id="overview">
+      <h2><span class="num">1</span>System Overview</h2>
+      <div class="divider"></div>
+      <p>The Sponsor Dossier Agent is a fully automated AI-powered research and outreach management system built for NorthStar AI Labs. It discovers potential sponsors across five categories — cloud/AI credit providers, Atlanta corporates, national tech companies, in-kind partners, and grants — plus a dedicated Small AI Startups track, finds decision-maker contacts at each company, drafts personalized outreach, scores every lead, and gives the team a full web dashboard to manage the pipeline from discovery through to a confirmed sponsor.</p>
+      <p>It has grown from a single-script research tool into a small full-stack web application: a Flask API backend, a React dashboard, deterministic lead scoring, per-contact outreach management, and a full settings layer for tuning how the agent searches and scores.</p>
+
+      <h3>Architecture at a glance</h3>
+      <div class="callout blue">
+        <div class="callout-title">No database, no queue — by design</div>
+        <ul>
+          <li><b>Backend:</b> Python 3 + Flask (flask-cors), single background thread per agent run</li>
+          <li><b>Persistence:</b> flat JSON files only — <code class="inline">settings.json</code>, <code class="inline">output/dossier.json</code>, <code class="inline">output/search_cache.json</code>, <code class="inline">output/photo_cache.json</code>, <code class="inline">output/api_usage.json</code>, <code class="inline">output/eligibility_cache.json</code></li>
+          <li><b>Frontend:</b> React + Vite (dev server on :5173), react-router-dom, Tailwind CSS, plain <code class="inline">fetch()</code> against the Flask API — no state library, just React state + 2-second polling during a run</li>
+          <li>Everything runs synchronously within one background thread per run — intentionally simple, no vector DB, no task queue, no real database</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="stack">
+      <h2><span class="num">2</span>Technology Stack</h2>
+      <div class="divider"></div>
+
+      <h3>Backend</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:26%">Component</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>Flask + flask-cors</td><td>REST API server (<code class="inline">backend/app.py</code>) — handles run/poll/settings/results/outreach/downloads endpoints</td></tr>
+            <tr><td>OpenAI API (gpt-4o-mini)</td><td>The research agent itself — drives the tool-calling loop that discovers companies/programs across all categories, and powers "Regenerate with AI" for outreach messages</td></tr>
+            <tr><td>python-dotenv</td><td>Loads <code class="inline">.env</code> for all API keys</td></tr>
+            <tr><td>JSON files</td><td>Entire persistence layer — settings, dossier data, search/photo/eligibility caches, API usage counters</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Search &amp; Discovery</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:26%">Component</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>SerpAPI</td><td>Primary search engine for everything: company discovery, LinkedIn contact search, stale-contact verification, profile photo search. Hard-capped at 200 searches/hour with a warn-and-ask pause near the limit.</td></tr>
+            <tr><td>Brave Search API</td><td>Dormant fallback — activates only if <code class="inline">SERPAPI_API_KEY</code> isn't set. Rate-limited to stay under Brave's 50 req/sec ceiling, with its own configurable per-run and monthly caps.</td></tr>
+            <tr><td>requests</td><td>Underlying HTTP client for both search engines plus every scraper below</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Scraping — Small AI Startups Discovery</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:26%">Source</th><th>How it actually works</th></tr></thead>
+          <tbody>
+            <tr><td>Y Combinator directory</td><td>Not HTML scraping — hits YC's own public, read-only Algolia search backend directly. Avoids robots.txt blocks and Selenium entirely. Zero API quota cost — the primary, working source for Small AI Startups.</td></tr>
+            <tr><td>Crunchbase / Wellfound</td><td>requests + BeautifulSoup4, gated by a robots.txt check. Both block this in practice, so they rarely produce results — YC covers the category instead.</td></tr>
+            <tr><td>Selenium (headless Chrome)</td><td>Heavier fallback for Crunchbase/Wellfound only if the plain-requests pass returns empty. Optional dependency, degrades gracefully if unavailable.</td></tr>
+            <tr><td>Eligibility pages</td><td>AWS Activate, Google for Startups, Microsoft for Startups — requests + BeautifulSoup4 direct scrape, cached 30 days.</td></tr>
+            <tr><td>Company logos</td><td>Direct CDN calls in order: Google Favicon API → DuckDuckGo icons → Brandfetch.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Media Processing &amp; Export</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:26%">Component</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>Pillow (PIL)</td><td>Circle-crops/resizes contact photos, generates initials-placeholder avatars and logo placeholders</td></tr>
+            <tr><td>ReportLab</td><td>Builds the contact-dossier PDFs — one company info page followed by one page per contact</td></tr>
+            <tr><td>pandas + openpyxl</td><td>Excel export, including the separate Small AI Startups sheet</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Frontend</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:26%">Component</th><th>Role</th></tr></thead>
+          <tbody>
+            <tr><td>React + Vite</td><td>Single-page app, dev server on :5173</td></tr>
+            <tr><td>react-router-dom</td><td>Routing across Dashboard, Company Detail (<code class="inline">/company/:id</code>), and Outreach pages</td></tr>
+            <tr><td>Tailwind CSS</td><td>All styling</td></tr>
+            <tr><td>Plain fetch()</td><td>Calls the Flask API directly — React state + 2-second polling (<code class="inline">/api/poll</code>) while a run is active</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="pipeline">
+      <h2><span class="num">3</span>Core Agent Pipeline</h2>
+      <div class="divider"></div>
+
+      <div class="callout blue">
+        <div class="callout-title">End-to-End Flow</div>
+        <ol>
+          <li>User clicks Run Agent (Full Run) or Quick Refresh from the Dashboard</li>
+          <li>Flask spawns a background thread running <code class="inline">run_agent()</code></li>
+          <li>GPT-4o-mini reasons over the 5 hardcoded categories + any custom keywords, deciding what to search</li>
+          <li>SerpAPI/Brave executes company/program discovery searches</li>
+          <li>Y Combinator directory (+ Crunchbase/Wellfound/Selenium fallback) discovers Small AI Startups separately</li>
+          <li>Senior contacts (2/company) and mandatory Atlanta contacts (2/company) are found via LinkedIn-scoped search</li>
+          <li>Stale/former-employee contacts are filtered out via title-pattern checks and a lightweight verification search</li>
+          <li>A default outreach message is generated per contact automatically (template, not AI)</li>
+          <li>Lead scores (company-level + per-contact) are calculated deterministically</li>
+          <li>Results are written to dossier.json, Excel, and PDF; the dashboard updates in real time via polling</li>
+        </ol>
+      </div>
+
+      <h3>Full Run vs. Quick Refresh</h3>
+      <ul class="clean">
+        <li><b>Full Run</b> — ignores the cache entirely and researches everything from scratch across all categories, Atlanta contacts, and custom keywords.</li>
+        <li><b>Quick Refresh</b> — skips any company already cached and fresh (default 30-day window, configurable in Settings). Still searches for genuinely new companies, and for existing companies fills in specific missing gaps rather than re-researching the whole company. Logs cache hits vs. misses in the progress feed.</li>
+      </ul>
+
+      <h3>Search budget controls</h3>
+      <p>Both search engines have independent, Settings-configurable budgets: a per-run cap (default 200/hour for SerpAPI, 300/run for Brave) and, where relevant, a monthly usage counter. When a run approaches either cap, the agent pauses and enters a <code class="inline">paused_awaiting_confirmation</code> state, offering "Finalize Now" or "Continue Anyway." Profile photo fetching is treated as a required category — the budget prioritizes discovery → senior contacts → Atlanta contacts → verification → photos, but photos are only skipped if the hourly cap is genuinely exhausted mid-run, never de-prioritized by design.</p>
+    </section>
+
+    <section id="contacts">
+      <h2><span class="num">4</span>Contact Discovery &amp; Accuracy</h2>
+      <div class="divider"></div>
+
+      <h3>Senior contacts + mandatory Atlanta contacts</h3>
+      <p>Every company gets two contact searches run in parallel: the original senior/decision-maker search (VP, Director, Head of, or Founder-level for small companies) and a separate, <b>mandatory</b> Atlanta-scoped search using broadened, less senior role keywords (Marketing Manager, Community Manager, Regional Sales, Partnerships Coordinator, Program Manager) since local offices are less likely to have VP-level staff. The Atlanta search retries up to 2 phrasings if the first attempt returns nothing, then logs clearly if no local contact could be found rather than failing silently.</p>
+      <p>Each contact carries a <code class="inline">location</code> field — null for standard senior-search contacts, or a tagged value like "Atlanta, GA" for location-matched ones. The Results page has a dedicated <b>Filter by Location</b> control, separate from Filter by Status.</p>
+
+      <h3>Stale / former-employee filtering</h3>
+      <p>Contact scoring specifically detects and excludes people who no longer work at the target company — especially founders who've moved to a new venture while their LinkedIn title still reads "Founder" of the original company. Detection covers:</p>
+      <ul class="clean">
+        <li>Direct phrasing: "former," "ex-," "previously at {company}"</li>
+        <li>Date-range titles suggesting a past, not current, role</li>
+        <li>Founder/Co-Founder titles where the snippet references a different, current company</li>
+        <li>Weak/absent current-role signals default to <b>exclusion</b>, not inclusion — accuracy over quantity</li>
+      </ul>
+      <p>A lightweight secondary verification search runs only on the final selected contacts, not every candidate, to stay within the search budget.</p>
+    </section>
+
+    <section id="scoring">
+      <h2><span class="num">5</span>Lead Scoring Model</h2>
+      <div class="divider"></div>
+      <p>A deterministic, rule-based scoring system (no ML/training) built entirely on data the agent already collects, implemented in <code class="inline">tools/lead_scoring.py</code>. There are two separate scores — a company-level score and a per-contact responsiveness score.</p>
+
+      <h3>5.1 Company-Level Lead Score (0–100)</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:22%">Factor</th><th style="width:8%">Max</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Program/Offer Size</td><td>30</td><td>Parses offer text for dollar amounts and scale language. $50k+ → 30; $10k–50k → 24; $1k–10k → 18; under $1k → ~14. "Unlimited/uncapped" → 27. "Credits" with no figure → ~20. Vague text → 9. No offer text at all → 15 (neutral default).</td></tr>
+            <tr><td>Program Recency/Verification</td><td>25</td><td>Verified active → 25. Confirmed stale/discontinued → ~4. Missing/never checked → ~11 (uncertain, not penalized as heavily as confirmed-stale).</td></tr>
+            <tr><td>Category Fit</td><td>25</td><td>Configurable per-category weight: Credit Providers 25, Cash &amp; In-Kind 25, AI Startup Sponsors 18, Small AI Startups 18, Grants 10 — credits/cash close faster than grants' longer application processes.</td></tr>
+            <tr><td>Contact Coverage</td><td>20</td><td>Full 20 if ≥1 Atlanta-tagged contact AND ≥1 senior contact. 12 if only one type. 5 if contacts exist but neither type. 0 if none found.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.2 Per-Contact Responsiveness Score (0–100)</h3>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th style="width:22%">Factor</th><th style="width:8%">Max</th><th>Logic</th></tr></thead>
+          <tbody>
+            <tr><td>Role Type</td><td>50</td><td>Optimized for response likelihood, not seniority. Operational/high-intent roles (Partnerships, Community Manager, DevRel, Accelerator Lead) → 50. Founders at small companies → 50. Founders at large companies → 20. VP/Director/C-level at large companies → 15 (lowest). Same seniority at small companies → 30. No title on file → 20.</td></tr>
+            <tr><td>Location Match</td><td>30</td><td>Full 30 if tagged Atlanta, GA; 0 otherwise.</td></tr>
+            <tr><td>Recency of Verification</td><td>20</td><td>Full 20 if passed stale-contact verification. 8 if not run or inconclusive.</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>5.3 Where scores show up</h3>
+      <ul class="clean">
+        <li><b>Dashboard</b> — color-graded score badge on every sponsor card (<span class="badge green">≥70</span> <span class="badge amber">40–69</span> <span class="badge grey">&lt;40</span>) plus "Sort by Lead Score"</li>
+        <li><b>Company Detail Page</b> — full factor breakdown; contacts sorted by responsiveness, top contact labeled "Suggested first contact"</li>
+        <li><b>Outreach Portal</b> — sortable Responsiveness column</li>
+        <li><b>Excel Export</b> — Lead Score column plus per-contact Responsiveness column</li>
+      </ul>
+      <p>Both scores recompute automatically on every dossier save — pure computation, no new searches. A "Recalculate All Scores" button in Settings re-scores everything after category weights are edited.</p>
+    </section>
+
+    <section id="ui">
+      <h2><span class="num">6</span>Dashboard, Company Pages &amp; Outreach Portal</h2>
+      <div class="divider"></div>
+
+      <h3>Dashboard (Results Grid)</h3>
+      <p>Each sponsor card shows only: logo, company name, program name, a colored status pill, a one-line offer summary, the lead score badge, and a "View Details (X contacts)" button — deeper detail lives on the company detail page. The status summary stat cards double as clickable filters, alongside a separate Filter by Location control. Each category has a distinct accent color and card tint.</p>
+
+      <h3>Company Detail Page <code class="inline">/company/:companyId</code></h3>
+      <p>Shows the full offer and pitch text, an editable status dropdown, the full lead-score breakdown, and every contact — each with responsiveness score, LinkedIn link, location tag, editable outreach message with "Regenerate with AI," "Copy to Clipboard," and individually editable status.</p>
+
+      <h3>Outreach Portal</h3>
+      <p>A flat, sortable table of every contact across all companies — name, title, company, location tag, status, responsiveness score — backed by the same message data as the company detail page.</p>
+
+      <h3>Small AI Startups — separate tab &amp; exports</h3>
+      <p>Small/early-stage AI companies (primarily sourced from the YC directory) live in their own dashboard tab with a dedicated PDF and Excel sheet. The main exports exclude this category entirely — every company appears in exactly one export.</p>
+
+      <h3>Settings panel</h3>
+      <ul class="clean">
+        <li><b>Saved keyword libraries</b> — separate lists for company-focus and contact-title keywords</li>
+        <li><b>Contacts per company</b> — default 2 senior + 2 Atlanta = 4 target contacts</li>
+        <li><b>Seniority rules by company size</b> — editable target-title lists</li>
+        <li><b>Cache freshness</b> — default 30 days</li>
+        <li><b>Search budget caps</b> — separate per-run and monthly caps for SerpAPI and Brave</li>
+        <li><b>Lead scoring weights</b> — editable per-category Category Fit weights, plus "Recalculate All Scores"</li>
+      </ul>
+    </section>
+
+    <section id="exports">
+      <h2><span class="num">7</span>Excel &amp; PDF Exports</h2>
+      <div class="divider"></div>
+
+      <h3>Excel export</h3>
+      <p>Main export has separate sheets for Credit Providers, Cash &amp; In-Kind, AI Startup Sponsors, and Grants; Small AI Startups gets its own sheet/file. Columns include company info, program/offer text, lead score, and per-contact rows.</p>
+
+      <h3>PDF export (ReportLab)</h3>
+      <p>Restructured page order: one company info page, followed by one page per contact (photo, name, title, LinkedIn, location tag, full outreach message). Repeats per company, grouped by category. The Small AI Startups PDF uses the same structure, generated separately.</p>
+      <ul class="clean">
+        <li><b>Company logos</b> — Google Favicon API → DuckDuckGo icons → Brandfetch → generated placeholder</li>
+        <li><b>Contact photos</b> — fetched via image search, circle-cropped with Pillow, cached per contact, initials fallback</li>
+        <li><b>Footer</b> — every page shows the PDF generation date</li>
+        <li><b>Resilience</b> — each contact's page generation is wrapped individually so one bad record can't crash the export</li>
+      </ul>
+    </section>
+
+    <section id="issues">
+      <h2><span class="num">8</span>Known Issues &amp; Limitations</h2>
+      <div class="divider"></div>
+
+      <h3>Search budget pressure</h3>
+      <p>SerpAPI's 200/hour cap is tight relative to a full run's real search needs on a completely fresh, uncached run. Quick Refresh and caching substantially reduce this on repeat runs, but a first-ever full run may still hit the pause-and-ask flow.</p>
+
+      <h3>Crunchbase / Wellfound scraping is effectively dead</h3>
+      <p>Both sources are blocked at the robots.txt / bot-detection layer before a request is attempted, so the Selenium fallback rarely fires. The Y Combinator directory is the real, working source for Small AI Startups.</p>
+
+      <h3>Profile photo accuracy</h3>
+      <p>Photos are matched by name + company + title search, not verified against identity — the first usable image may occasionally be the wrong person. Visual verification before external use is recommended.</p>
+
+      <h3>Lead scoring is rule-based, not machine-learned</h3>
+      <p>The current model is a transparent, hand-weighted formula — by design, since there isn't yet enough historical outcome data to train a reliable classifier. This is Phase 1 of a longer plan: once enough real outcomes accumulate through status tracking, a lightweight ML model could be trained and blended in as Phase 2.</p>
+    </section>
+
+    <section id="roadmap">
+      <h2><span class="num">9</span>Roadmap</h2>
+      <div class="divider"></div>
+
+      <h3>Near term</h3>
+      <ul class="clean">
+        <li><b>ML-based lead scoring (Phase 2)</b> — train a real model on accumulated outcome data</li>
+        <li><b>Similar-company suggestions</b> — once a sponsor confirms, surface similar likely converters</li>
+        <li><b>News/trigger alerts</b> — flag new program announcements or relevant funding news</li>
+      </ul>
+
+      <h3>Medium term</h3>
+      <ul class="clean">
+        <li><b>Multi-touch outreach sequences</b> — a short follow-up sequence instead of one message</li>
+        <li><b>Follow-up reminders</b> — flag contacts stuck in "Contacted" past a threshold</li>
+        <li><b>Team assignment</b> — assign sponsors/contacts to specific team members</li>
+        <li><b>Pipeline dashboard</b> — a funnel view (found → contacted → responded → confirmed)</li>
+      </ul>
+
+      <h3>Longer term</h3>
+      <ul class="clean">
+        <li><b>Scheduled runs + digest email</b> — auto-run Quick Refresh and email a summary</li>
+        <li><b>Slack notifications</b> — post when a sponsor is confirmed</li>
+        <li><b>Multi-tenant / workspace support</b> — reuse the engine for other ventures via a company-switcher</li>
+      </ul>
+
+      <div class="callout green">
+        <div class="callout-title">Confidential — NorthStar AI Labs</div>
+        <p style="margin:0;font-size:13px;">This documentation is generated from the live codebase and updated as features ship.</p>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer class="docfooter">
+  NorthStar AI Labs · Sponsor Dossier Agent · Internal Documentation
+</footer>
+
+<script>
+  // Mobile sidebar toggle
+  const menuBtn = document.getElementById('menuBtn');
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('overlay');
+  function closeMenu(){ sidebar.classList.remove('open'); overlay.classList.remove('show'); }
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('show');
+  });
+  overlay.addEventListener('click', closeMenu);
+  document.querySelectorAll('.navlink').forEach(a => a.addEventListener('click', closeMenu));
+
+  // Active link highlighting on scroll
+  const links = document.querySelectorAll('.navlink');
+  const sections = [...links].map(l => document.querySelector(l.getAttribute('href')));
+  function setActive(){
+    let idx = 0;
+    const y = window.scrollY + 100;
+    sections.forEach((s, i) => { if (s && s.offsetTop <= y) idx = i; });
+    links.forEach(l => l.classList.remove('active'));
+    links[idx].classList.add('active');
+  }
+  window.addEventListener('scroll', setActive);
+  setActive();
+
+  // Auto-fill GitHub link if repo name detectable from page URL (GitHub Pages project sites)
+  const path = window.location.pathname.split('/').filter(Boolean);
+  const host = window.location.hostname;
+  if (host.endsWith('github.io') && path.length > 0) {
+    const user = host.split('.')[0];
+    const repo = path[0];
+    document.getElementById('repoLink').href = `https://github.com/${user}/${repo}`;
+  } else {
+    document.getElementById('repoLink').style.display = 'none';
+  }
+</script>
+
+</body>
+</html>
